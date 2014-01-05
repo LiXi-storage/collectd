@@ -4806,6 +4806,7 @@ plugin_ipvs="no"
 plugin_irq="no"
 plugin_libvirt="no"
 plugin_load="no"
+plugin_lustre="no"
 plugin_memory="no"
 plugin_multimeter="no"
 plugin_nfs="no"
@@ -4859,6 +4860,11 @@ then
 	if test "x$have_linux_ip_vs_h" = "xyes" || test "x$have_net_ip_vs_h" = "xyes" || test "x$have_ip_vs_h" = "xyes"
 	then
 		plugin_ipvs="yes"
+	fi
+
+	if test "x$with_libxml2" = "xyes"
+	then
+		plugin_lustre="yes"
 	fi
 fi
 
@@ -5147,6 +5153,7 @@ AC_PLUGIN([libvirt],     [$plugin_libvirt],    [Virtual machine statistics])
 AC_PLUGIN([load],        [$plugin_load],       [System load])
 AC_PLUGIN([logfile],     [yes],                [File logging plugin])
 AC_PLUGIN([lpar],        [$with_perfstat],     [AIX logical partitions statistics])
+AC_PLUGIN([lustre],      [$plugin_lustre],     [Lustre plugin])
 AC_PLUGIN([lvm],         [$with_liblvm2app],   [LVM statistics])
 AC_PLUGIN([madwifi],     [$have_linux_wireless_h], [Madwifi wireless statistics])
 AC_PLUGIN([match_empty_counter], [yes],        [The empty counter match])
@@ -5492,6 +5499,7 @@ Configuration:
     load  . . . . . . . . $enable_load
     logfile . . . . . . . $enable_logfile
     lpar  . . . . . . . . $enable_lpar
+    lustre . . . . . . . .$enable_lustre
     lvm . . . . . . . . . $enable_lvm
     madwifi . . . . . . . $enable_madwifi
     match_empty_counter . $enable_match_empty_counter

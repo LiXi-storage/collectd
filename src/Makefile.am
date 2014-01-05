@@ -569,6 +569,16 @@ load_la_LIBADD += -lperfstat
 endif
 endif # BUILD_PLUGIN_LOAD
 
+if BUILD_PLUGIN_LUSTRE
+pkglib_LTLIBRARIES += lustre.la
+lustre_la_SOURCES = lustre.c lustre_xml.c lustre_xml.h lustre.h list.h
+lustre_la_CFLAGS = $(AM_CFLAGS) $(BUILD_WITH_LIBXML2_CFLAGS)
+lustre_la_LDFLAGS = -module -avoid-version
+lustre_la_LIBADD = $(BUILD_WITH_LIBXML2_LIBS)
+collectd_LDADD += lustre.la
+collectd_DEPENDENCIES += lustre.la
+endif # BUILD_PLUGIN_LUSTRE
+
 if BUILD_PLUGIN_LOGFILE
 pkglib_LTLIBRARIES += logfile.la
 logfile_la_SOURCES = logfile.c
