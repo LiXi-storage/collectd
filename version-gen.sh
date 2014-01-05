@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #DEFAULT_VERSION="5.4.0.git"
-DEFAULT_VERSION="5.4.0"
+DEFAULT_VERSION="5.4.0.g$(git rev-parse --short HEAD)"
 
 #VERSION="`git describe 2> /dev/null | sed -e 's/^collectd-//'`"
 
