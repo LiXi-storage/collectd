@@ -1319,6 +1319,10 @@ rm -rf %{buildroot}
 %{__make} install DESTDIR=%{buildroot}
 %{__install} -Dp -m 0755 contrib/redhat/init.d-collectd %{buildroot}%{_initrddir}/collectd
 %{__install} -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
+%{__install} -Dp -m0644 contrib/ddn/lustre-2.4.x_definition.xml %{buildroot}%{_sysconfdir}/lustre-2.4.x_definition.xml
+%{__install} -Dp -m0644 contrib/ddn/lustre-2.5.x_definition.xml %{buildroot}%{_sysconfdir}/lustre-2.5.x_definition.xml
+%{__install} -Dp -m0644 contrib/ddn/collectd.conf.mds %{buildroot}%{_sysconfdir}/collectd.conf.mds
+%{__install} -Dp -m0644 contrib/ddn/collectd.conf.oss %{buildroot}%{_sysconfdir}/collectd.conf.oss
 %{__install} -d %{buildroot}%{_sharedstatedir}/collectd/
 %{__install} -d %{buildroot}%{_sysconfdir}/collectd.d/
 
