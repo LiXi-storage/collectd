@@ -1264,8 +1264,9 @@ LoadPlugin lustre
 <Plugin "lustre">
   <Common>
     Debug false
-    #DefinitionFile "/etc/lustre-2.4.x_definition.xml" 
-    DefinitionFile "/etc/lustre-2.5.x_definition.xml" 
+    #DefinitionFile "/etc/lustre-1.8_definition.xml"
+    DefinitionFile "/etc/lustre-2.4_definition.xml"
+    #DefinitionFile "/etc/lustre-2.5_definition.xml"
   </Common>
   <Item>
     Type "ost_stats_write"
