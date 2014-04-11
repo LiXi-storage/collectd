@@ -14,8 +14,9 @@
 	<!ELEMENT index          (#PCDATA)>
 	<!ELEMENT name           (#PCDATA)>
 
-	<!ELEMENT item           (name,pattern,field+)>
+	<!ELEMENT item           (name,context?,pattern,field+)>
 	<!ELEMENT pattern        (#PCDATA)>
+	<!ELEMENT context        (#PCDATA)>
 
 	<!ELEMENT field          (index,name,type,option+)>
 	<!ELEMENT type           (#PCDATA)>
@@ -1919,6 +1920,195 @@
 							<option>
 								<name>type_instance</name>
 								<string>quotactl</string>
+							</option>
+						</field>
+					</item>
+				</entry>
+				<entry>
+					<subpath>
+						<subpath_type>constant</subpath_type>
+						<path>brw_stats</path>
+					</subpath>
+					<mode>file</mode>
+					<item>
+						<name>ost_brw_stats_iotime</name>
+						<context>^I/O time .+
+(.+
+)*$</context>
+						<pattern>([[:digit:]]+):		 +([[:digit:]]+) +([[:digit:]]+) +([[:digit:]]+) +\| +([[:digit:]]+) +([[:digit:]]+) +([[:digit:]]+)</pattern>
+						<field>
+							<index>1</index>
+							<name>millisecond</name>
+							<type>string</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>millisecond</string>
+							</option>
+						</field>
+						<field>
+							<index>2</index>
+							<name>read_sample</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>read_sample</string>
+							</option>
+						</field>
+						<field>
+							<index>3</index>
+							<name>read_persentage</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>read_persentage</string>
+							</option>
+						</field>
+						<field>
+							<index>4</index>
+							<name>cum</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>read_cum</string>
+							</option>
+						</field>					
+						<field>
+							<index>5</index>
+							<name>write_sample</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>write_sample</string>
+							</option>
+						</field>
+						<field>
+							<index>6</index>
+							<name>write_persentage</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>write_persentage</string>
+							</option>
+						</field>
+						<field>
+							<index>7</index>
+							<name>write_cum</name>
+							<type>number</type>
+							<option>
+								<name>host</name>
+								<string>${subpath:ost_name}</string>
+							</option>
+							<option>
+								<name>plugin</name>
+								<string>brw_stats</string>
+							</option>
+							<option>
+								<name>plugin_instance</name>
+								<string>iotime_${content:millisecond}</string>
+							</option>
+							<option>
+								<name>type</name>
+								<string>gauge</string>
+							</option>
+							<option>
+								<name>type_instance</name>
+								<string>write_cum</string>
 							</option>
 						</field>
 					</item>
