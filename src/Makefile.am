@@ -455,6 +455,16 @@ collectd_LDADD += "-dlopen" gmond.la
 collectd_DEPENDENCIES += gmond.la
 endif
 
+if BUILD_PLUGIN_GANGLIA
+pkglib_LTLIBRARIES += ganglia.la
+ganglia_la_SOURCES = ganglia.c
+ganglia_la_CPPFLAGS = $(AM_CPPFLAGS) $(GANGLIA_CPPFLAGS)
+ganglia_la_LDFLAGS = -module -avoid-version $(GANGLIA_LDFLAGS)
+ganglia_la_LIBADD = $(GANGLIA_LIBS)
+collectd_LDADD += "-dlopen" ganglia.la
+collectd_DEPENDENCIES += ganglia.la
+endif
+
 if BUILD_PLUGIN_HDDTEMP
 pkglib_LTLIBRARIES += hddtemp.la
 hddtemp_la_SOURCES = hddtemp.c
