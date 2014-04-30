@@ -1119,6 +1119,15 @@ collectd_LDADD += "-dlopen" statsd.la
 collectd_DEPENDENCIES += statsd.la
 endif
 
+if BUILD_PLUGIN_STRESS
+pkglib_LTLIBRARIES += stress.la
+stress_la_SOURCES = stress.c
+stress_la_LDFLAGS = -module -avoid-version
+stress_la_LIBADD = -lpthread
+collectd_LDADD += stress.la
+collectd_DEPENDENCIES += stress.la
+endif
+
 if BUILD_PLUGIN_SWAP
 pkglib_LTLIBRARIES += swap.la
 swap_la_SOURCES = swap.c

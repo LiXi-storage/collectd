@@ -4815,6 +4815,7 @@ plugin_perl="no"
 plugin_processes="no"
 plugin_protocols="no"
 plugin_serial="no"
+plugin_stress="no"
 plugin_swap="no"
 plugin_tape="no"
 plugin_tcpconns="no"
@@ -4849,6 +4850,7 @@ then
 	plugin_processes="yes"
 	plugin_protocols="yes"
 	plugin_serial="yes"
+	plugin_stress="yes"
 	plugin_swap="yes"
 	plugin_tcpconns="yes"
 	plugin_thermal="yes"
@@ -5206,6 +5208,7 @@ AC_PLUGIN([snmp],        [$with_libnetsnmp],   [SNMP querying plugin])
 AC_PLUGIN([statsd],      [yes],                [StatsD plugin])
 AC_PLUGIN([swap],        [$plugin_swap],       [Swap usage statistics])
 AC_PLUGIN([syslog],      [$have_syslog],       [Syslog logging plugin])
+AC_PLUGIN([stress],      [$plugin_stress],     [Stress test])
 AC_PLUGIN([table],       [yes],                [Parsing of tabular data])
 AC_PLUGIN([tail],        [yes],                [Parsing of logfiles])
 AC_PLUGIN([tail_csv],    [yes],                [Parsing of CSV files])
@@ -5550,6 +5553,7 @@ Configuration:
     sigrok  . . . . . . . $enable_sigrok
     snmp  . . . . . . . . $enable_snmp
     statsd  . . . . . . . $enable_statsd
+    stress  . . . . . . . $enable_stress
     swap  . . . . . . . . $enable_swap
     syslog  . . . . . . . $enable_syslog
     table . . . . . . . . $enable_table
