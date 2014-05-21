@@ -26,6 +26,7 @@
 %define with_exec 0%{!?_without_exec:1}
 %define with_filecount 0%{!?_without_filecount:1}
 %define with_fscache 0%{!?_without_fscache:1}
+%define with_ganglia 0%{!?_without_ganglia:1}
 %define with_gmond 0%{!?_without_gmond:1}
 %define with_hddtemp 0%{!?_without_hddtemp:1}
 %define with_interface 0%{!?_without_interface:1}
@@ -68,6 +69,7 @@
 %define with_sensors 0%{!?_without_sensors:1}
 %define with_serial 0%{!?_without_serial:1}
 %define with_snmp 0%{!?_without_snmp:1}
+%define with_stress 0%{!?_without_stress:1}
 %define with_swap 0%{!?_without_swap:1}
 %define with_syslog 0%{!?_without_syslog:1}
 %define with_table 0%{!?_without_table:1}
@@ -238,6 +240,17 @@ Group:		System Environment/Daemons
 Requires:	%{name}%{?_isa} = %{version}-%{release}, spamassassin
 %description email
 This plugin collects data provided by spamassassin.
+%endif
+
+%if %{with_ganglia}
+%package ganglia
+Summary:	Ganglia plugin for collectd
+Group:		System Environment/Daemons
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+BuildRequires:	ganglia-devel
+%description ganglia
+The ganglia plugin send udp data to gmond,
+the client daemon of the Ganglia project.
 %endif
 
 %if %{with_gmond}
@@ -488,6 +501,15 @@ BuildRequires:	net-snmp-devel
 This plugin for collectd allows querying of network equipment using SNMP.
 %endif
 
+%if %{with_stress}
+%package stress
+Summary:	Stress plugin for collectd
+Group:		System Environment/Daemons
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+%description stress
+Stress plugin, used to stress test for collectd
+%endif
+
 %if %{with_varnish}
 %package varnish
 Summary:	Varnish plugin for collectd
@@ -719,6 +741,12 @@ Development files for libcollectdclient
 %define _with_fscache --enable-fscache
 %else
 %define _with_fscache --disable-fscache
+%endif
+
+%if %{with_ganglia}
+%define _with_ganglia --enable-ganglia
+%else
+%define _with_ganglia --disable-ganglia
 %endif
 
 %if %{with_gmond}
@@ -1033,6 +1061,12 @@ Development files for libcollectdclient
 %define _with_snmp --disable-snmp
 %endif
 
+%if %{with_stress}
+%define _with_stress --enable-stress
+%else
+%define _with_stress --disable-stress
+%endif
+
 %if %{with_swap}
 %define _with_swap --enable-swap
 %else
@@ -1231,6 +1265,7 @@ Development files for libcollectdclient
 	%{?_with_exec} \
 	%{?_with_filecount} \
 	%{?_with_fscache} \
+	%{?_with_gandlia} \
 	%{?_with_gmond} \
 	%{?_with_hddtemp} \
 	%{?_with_interface} \
@@ -1265,6 +1300,7 @@ Development files for libcollectdclient
 	%{?_with_lustre} \
 	%{?_with_sensors} \
 	%{?_with_snmp} \
+	%{?_with_stress} \
 	%{?_with_tape} \
 	%{?_with_tokyotyrant} \
 	%{?_with_varnish} \
@@ -1474,6 +1510,9 @@ fi
 %if %{with_fscache}
 %{_libdir}/%{name}/fscache.so
 %endif
+%if %{with_ganglia}
+%{_libdir}/%{name}/ganglia.so
+%endif
 %if %{with_interface}
 %{_libdir}/%{name}/interface.so
 %endif
@@ -1488,6 +1527,9 @@ fi
 %endif
 %if %{with_logfile}
 %{_libdir}/%{name}/logfile.so
+%endif
+%if %{with_lustre}
+%{_libdir}/%{name}/lustre.so
 %endif
 %if %{with_madwifi}
 %{_libdir}/%{name}/madwifi.so
@@ -1536,6 +1578,9 @@ fi
 %endif
 %if %{with_serial}
 %{_libdir}/%{name}/serial.so
+%endif
+%if %{with_stress}
+%{_libdir}/%{name}/stress.so
 %endif
 %if %{with_swap}
 %{_libdir}/%{name}/swap.so
@@ -1587,11 +1632,6 @@ fi
 %endif
 %if %{with_write_graphite}
 %{_libdir}/%{name}/write_graphite.so
-%endif
-
-%if %{with_lustre}
-%files lustre
-%{_libdir}/%{name}/lustre.so
 %endif
 
 # All plugins not built by default because of dependencies on libraries not
@@ -1671,6 +1711,11 @@ fi
 %{_libdir}/%{name}/email.so
 %endif
 
+%if %{with_ganglia}
+%files ganglia
+%{_libdir}/%{name}/ganglia.so
+%endif
+
 %if %{with_gmond}
 %files gmond
 %{_libdir}/%{name}/gmond.so
@@ -1702,6 +1747,11 @@ fi
 %if %{with_libvirt}
 %files libvirt
 %{_libdir}/%{name}/libvirt.so
+%endif
+
+%if %{with_lustre}
+%files lustre
+%{_libdir}/%{name}/lustre.so
 %endif
 
 %if %{with_memcachec}
@@ -1790,6 +1840,11 @@ fi
 %files snmp
 %{_mandir}/man5/collectd-snmp.5*
 %{_libdir}/%{name}/snmp.so
+%endif
+
+%if %{with_stress}
+%files stress
+%{_libdir}/%{name}/stress.so
 %endif
 
 %if %{with_varnish}
