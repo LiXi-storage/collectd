@@ -1265,7 +1265,7 @@ Development files for libcollectdclient
 	%{?_with_exec} \
 	%{?_with_filecount} \
 	%{?_with_fscache} \
-	%{?_with_gandlia} \
+	%{?_with_ganglia} \
 	%{?_with_gmond} \
 	%{?_with_hddtemp} \
 	%{?_with_interface} \
@@ -1509,9 +1509,6 @@ fi
 %endif
 %if %{with_fscache}
 %{_libdir}/%{name}/fscache.so
-%endif
-%if %{with_ganglia}
-%{_libdir}/%{name}/ganglia.so
 %endif
 %if %{with_interface}
 %{_libdir}/%{name}/interface.so

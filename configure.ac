@@ -5144,7 +5144,7 @@ AC_PLUGIN([exec],        [yes],                [Execution of external programs])
 AC_PLUGIN([filecount],   [yes],                [Count files in directories])
 AC_PLUGIN([fscache],     [$plugin_fscache],    [fscache statistics])
 AC_PLUGIN([gmond],       [$with_libganglia],   [Ganglia plugin])
-AC_PLUGIN([ganglia],     [$with_libganglia],   [Ganglia plugin])
+AC_PLUGIN([ganglia],     [$with_libganglia],   [Ganglia plugin to send data to gmond])
 AC_PLUGIN([hddtemp],     [yes],                [Query hddtempd])
 AC_PLUGIN([interface],   [$plugin_interface],  [Interface traffic statistics])
 AC_PLUGIN([ipmi],        [$plugin_ipmi],       [IPMI sensor statistics])
@@ -5492,7 +5492,7 @@ Configuration:
     filecount . . . . . . $enable_filecount
     fscache . . . . . . . $enable_fscache
     gmond . . . . . . . . $enable_gmond
-    cld2gmond. . . . . . .$enable_cld2gmond
+    ganglia . . . . . . . $enable_ganglia
     hddtemp . . . . . . . $enable_hddtemp
     interface . . . . . . $enable_interface
     ipmi  . . . . . . . . $enable_ipmi
