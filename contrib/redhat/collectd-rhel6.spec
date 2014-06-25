@@ -111,7 +111,7 @@
 
 Summary:	Statistics collection daemon for filling RRD files
 Name:		collectd
-Version:	5.4.0.g%{?rev}
+Version:	5.4.0.g%{?rev}.ddn1
 Release:	1%{?dist}
 URL:		http://collectd.org
 Source:		http://collectd.org/files/%{name}-%{version}.tar.bz2
@@ -319,6 +319,15 @@ BuildRequires:	libvirt-devel
 This plugin collects information from virtualized guests.
 %endif
 
+%if %{with_lustre}
+%package lustre
+Summary:	Lustre plugin for collectd
+Group:		System Environment/Daemons
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+%description lustre
+Lustre plugin for collectd.
+%endif
+
 %if %{with_memcachec}
 %package memcachec
 Summary:	Memcachec plugin for collectd
@@ -470,15 +479,6 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 BuildRequires:	rrdtool-devel
 %description rrdtool
 The RRDtool plugin writes values to RRD-files using librrd.
-%endif
-
-%if %{with_lustre}
-%package lustre
-Summary:	Lustre plugin for collectd
-Group:		System Environment/Daemons
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-%description lustre
-Lustre plugin for collectd.
 %endif
 
 %if %{with_sensors}
