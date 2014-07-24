@@ -5240,6 +5240,7 @@ AC_PLUGIN([write_mongodb], [$with_libmongoc],  [MongoDB output plugin])
 AC_PLUGIN([write_redis], [$with_libcredis],    [Redis output plugin])
 AC_PLUGIN([write_riemann], [$have_protoc_c],   [Riemann output plugin])
 AC_PLUGIN([xmms],        [$with_libxmms],      [XMMS statistics])
+AC_PLUGIN([zabbix],      [yes],                [Zabbix plugin])
 AC_PLUGIN([zfs_arc],     [$plugin_zfs_arc],    [ZFS ARC statistics])
 
 dnl Default configuration file
@@ -5588,6 +5589,7 @@ Configuration:
     write_redis . . . . . $enable_write_redis
     write_riemann . . . . $enable_write_riemann
     xmms  . . . . . . . . $enable_xmms
+    zabbix . . . . . . . .$enable_zabbix
     zfs_arc . . . . . . . $enable_zfs_arc
 
 EOF
