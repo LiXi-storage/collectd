@@ -4866,6 +4866,7 @@ then
 
 	if test "x$with_libxml2" = "xyes"
 	then
+		plugin_gpfs="yes"
 		plugin_lustre="yes"
 	fi
 fi
@@ -5143,6 +5144,7 @@ AC_PLUGIN([ethstat],     [$plugin_ethstat],    [Stats from NIC driver])
 AC_PLUGIN([exec],        [yes],                [Execution of external programs])
 AC_PLUGIN([filecount],   [yes],                [Count files in directories])
 AC_PLUGIN([fscache],     [$plugin_fscache],    [fscache statistics])
+AC_PLUGIN([gpfs],        [$plugin_gpfs],       [gpfs statistics])
 AC_PLUGIN([gmond],       [$with_libganglia],   [Ganglia plugin])
 AC_PLUGIN([ganglia],     [$with_libganglia],   [Ganglia plugin to send data to gmond])
 AC_PLUGIN([hddtemp],     [yes],                [Query hddtempd])
@@ -5493,6 +5495,7 @@ Configuration:
     fscache . . . . . . . $enable_fscache
     gmond . . . . . . . . $enable_gmond
     ganglia . . . . . . . $enable_ganglia
+    gpfs    . . . . . . . $enable_gpfs
     hddtemp . . . . . . . $enable_hddtemp
     interface . . . . . . $enable_interface
     ipmi  . . . . . . . . $enable_ipmi
