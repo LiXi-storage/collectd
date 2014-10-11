@@ -4,7 +4,7 @@ SUBDIRS = libltdl src bindings .
 
 INCLUDES = $(LTDLINCL)
 
-EXTRA_DIST = contrib version-gen.sh
+EXTRA_DIST = contrib version-gen.sh build.sh
 
 install-exec-hook:
 	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run

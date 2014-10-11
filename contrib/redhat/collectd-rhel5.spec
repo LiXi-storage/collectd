@@ -1,4 +1,3 @@
-%global _hardened_build 1
 
 # enabled plugins
 %define with_aggregation 0%{!?_without_aggregation:1}
@@ -1255,9 +1254,7 @@ Development files for libcollectdclient
 	#--enable-all-plugins=yes \
 
 mkdir -p libltdl/config # Workaround for RHEL5 build
-autoheader
-(automake --force-missing --add-missing| echo) # Workaround for RHEL5 build
-autoconf
+sh build.sh
 (%configure CFLAGS="%{optflags} -DLT_LAZY_OR_NOW=\"RTLD_LAZY|RTLD_GLOBAL\"" \
 	--disable-static \
 	--without-included-ltdl \
@@ -1389,7 +1386,6 @@ autoconf
 	%{?_with_zabbix} | echo) # Workaround for RHEL5 build
 
 # Workaround for RHEL5 build
-cp ../../libtool .
 %{__make} %{?_smp_mflags}
 
 
