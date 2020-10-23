@@ -173,6 +173,7 @@
 %define with_xmms 0%{!?_without_xmms:0%{?_has_xmms}}
 %define with_zfs_arc 0%{!?_without_zfs_arc:1}
 %define with_zookeeper 0%{!?_without_zookeeper:1}
+%define with_mdevents 0%{!?_without_mdevents:1}
 
 # DDN plugins
 %define with_filedata 0%{!?_without_filedata:1}
@@ -2141,6 +2142,12 @@ The zabbix plugin send key and value to zabbix server
 %define _with_zookeeper --disable-zookeeper
 %endif
 
+%if %{with_mdevents}
+%define _with_mdevents --enable-mdevents
+%else
+%define _with_mdevents --disable-mdevents
+%endif
+
 # DDN Plugins
 %if %{with_ganglia}
 %define _with_ganglia --enable-ganglia
@@ -2731,6 +2738,10 @@ fi
 %if %{with_zookeeper}
 %{_libdir}/%{name}/zookeeper.so
 %endif
+%if %{with_mdevents}
+%{_libdir}/%{name}/mdevents.so
+%endif
+
 #TODO put those in separate packages
 %{_libdir}/%{name}/buddyinfo.so
 %{_libdir}/%{name}/logparser.so
@@ -2747,9 +2758,6 @@ fi
 %{_includedir}/collectd/types.h
 
 %{_libdir}/pkgconfig/libcollectdclient.pc
-%{_includedir}/collectd/network_parse.h
-%{_includedir}/collectd/server.h
-%{_includedir}/collectd/types.h
 %{_libdir}/libcollectdclient.so
 
 %files -n libcollectdclient
