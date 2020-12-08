@@ -6839,6 +6839,7 @@ if test "x$ac_system" = "xLinux"; then
   if test "x$with_libxml2" = "xyes"; then
     plugin_gpfs="yes"
     plugin_lustre="yes"
+    plugin_ime="yes"
   fi
 
   if test "x$with_libxml2" = "xyes" && test "x$with_libssh2" = "xyes" && test "x$with_libzmq" = "xyes"; then
@@ -7193,6 +7194,7 @@ AC_PLUGIN([gpu_nvidia],          [$with_cuda],                [NVIDIA GPU plugin
 AC_PLUGIN([grpc],                [$plugin_grpc],              [gRPC plugin])
 AC_PLUGIN([hddtemp],             [yes],                       [Query hddtempd])
 AC_PLUGIN([hugepages],           [$plugin_hugepages],         [Hugepages statistics])
+AC_PLUGIN([ime],                 [$plugin_ime],               [DDN IME statistics])
 AC_PLUGIN([infiniband],          [$plugin_infiniband],        [Infiniband statistics])
 AC_PLUGIN([intel_pmu],           [$with_libjevents],          [Intel performance monitor plugin])
 AC_PLUGIN([intel_rdt],           [$with_libpqos],             [Intel RDT monitor plugin])
@@ -7210,7 +7212,7 @@ AC_PLUGIN([logfile],             [yes],                       [File logging plug
 AC_PLUGIN([logparser],           [yes],                       [Log parsing plugin])
 AC_PLUGIN([lpar],                [$with_perfstat],            [AIX logical partitions statistics])
 AC_PLUGIN([lua],                 [$with_liblua],              [Lua plugin])
-AC_PLUGIN([lustre],              [$plugin_lustre],          [Lustre plugin])
+AC_PLUGIN([lustre],              [$plugin_lustre],            [Lustre plugin])
 AC_PLUGIN([madwifi],             [$have_linux_wireless_h],    [Madwifi wireless statistics])
 AC_PLUGIN([match_empty_counter], [yes],                       [The empty counter match])
 AC_PLUGIN([match_hashed],        [yes],                       [The hashed match])
@@ -7646,6 +7648,7 @@ AC_MSG_RESULT([    gpu_nvidia  . . . . . $enable_gpu_nvidia])
 AC_MSG_RESULT([    grpc  . . . . . . . . $enable_grpc])
 AC_MSG_RESULT([    hddtemp . . . . . . . $enable_hddtemp])
 AC_MSG_RESULT([    hugepages . . . . . . $enable_hugepages])
+AC_MSG_RESULT([    ime . . . . . . . . . $enable_ime])
 AC_MSG_RESULT([    infiniband  . . . . . $enable_infiniband])
 AC_MSG_RESULT([    intel_pmu . . . . . . $enable_intel_pmu])
 AC_MSG_RESULT([    intel_rdt . . . . . . $enable_intel_rdt])
