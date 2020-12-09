@@ -2282,7 +2282,6 @@ The zabbix plugin send key and value to zabbix server
 	%{?_with_logfile} \
 	%{?_with_lpar} \
 	%{?_with_lua} \
-	--disable-lvm \
 	%{?_with_madwifi} \
 	%{?_with_mbmon} \
 	%{?_with_mcelog} \
