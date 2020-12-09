@@ -188,6 +188,8 @@
 # Plugins not built by default because of dependencies on libraries not
 # available in RHEL or EPEL:
 
+# plugin netstat_udp disabled, currently NetBSD-only
+%define with_netstat_udp 0%{!?_without_netstat_udp:0}
 # plugin apple_sensors disabled, requires a Mac
 %define with_apple_sensors 0%{!?_without_apple_sensors:0}
 # plugin aquaero disabled, requires a libaquaero5
@@ -1212,6 +1214,12 @@ The zabbix plugin send key and value to zabbix server
 %define _with_apcups --disable-apcups
 %endif
 
+%if %{with_netstat_udp}
+%define _with_netstat_udp --enable-netstat_udp
+%else
+%define _with_netstat_udp --disable-netstat_udp
+%endif
+
 %if %{with_apple_sensors}
 %define _with_apple_sensors --enable-apple_sensors
 %else
@@ -2223,6 +2231,7 @@ The zabbix plugin send key and value to zabbix server
 	%{?_with_amqp1} \
 	%{?_with_apache} \
 	%{?_with_apcups} \
+	%{?_with_netstat_udp} \
 	%{?_with_apple_sensors} \
 	%{?_with_aquaero} \
 	%{?_with_ascent} \
