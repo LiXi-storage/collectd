@@ -174,6 +174,7 @@
 %define with_zfs_arc 0%{!?_without_zfs_arc:1}
 %define with_zookeeper 0%{!?_without_zookeeper:1}
 %define with_mdevents 0%{!?_without_mdevents:1}
+%define with_infiniband 0%{!?_without_infiniband:1}
 
 # DDN plugins
 %define with_filedata 0%{!?_without_filedata:1}
@@ -2156,6 +2157,13 @@ The zabbix plugin send key and value to zabbix server
 %define _with_mdevents --disable-mdevents
 %endif
 
+%if %{with_infiniband}
+%define _with_infiniband --enable-infiniband
+%else
+%define _with_infiniband --disable-infiniband
+%endif
+
+
 # DDN Plugins
 %if %{with_ganglia}
 %define _with_ganglia --enable-ganglia
@@ -2748,6 +2756,9 @@ fi
 %endif
 %if %{with_mdevents}
 %{_libdir}/%{name}/mdevents.so
+%endif
+%if %{with_infiniband}
+%{_libdir}/%{name}/infiniband.so
 %endif
 
 #TODO put those in separate packages
