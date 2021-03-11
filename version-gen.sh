@@ -1,5 +1,5 @@
 #!/bin/sh
-DEFAULT_VERSION="5.12.0.barreleye0"
+DEFAULT_VERSION="5.12.0.barreleye1"
 
 if [ -d .git ]; then
 	VERSION="`git describe --dirty=+ --abbrev=7 2> /dev/null | sed -e '/^collectd-/!d' -e 's///' -e 'y/-/./'`"
