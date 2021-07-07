@@ -198,7 +198,7 @@ static int execute_remote_processes(LIBSSH2_SESSION *session,
 				    int sock, char *command,
 				    int command_len,
 				    void **result, int *result_len,
-				    char *end_string)
+				    char *end_string, int total_retry)
 {
 	int rc;
 	char buffer[256];
@@ -209,7 +209,6 @@ static int execute_remote_processes(LIBSSH2_SESSION *session,
 	struct pollfd pfds[numfds];
 	int len;
 	int retry = 0;
-	int total_retry = (int)CDTIME_T_TO_TIME_T(plugin_get_interval()) << 1;
 	int count = 0;
 
 
@@ -685,6 +684,7 @@ static int ssh_handle_request(struct ssh_configs *ssh_configs, int sock,
 	int result_len = SSH_RESULTS_BUFSIZE;
 	char str[SSH_BUFSIZE];
 	struct ssh_server_host *server_host = ssh_configs->active_host;
+	int total_retry = (int)CDTIME_T_TO_TIME_T(plugin_get_interval()) << 1;
 
 	receive_buf = calloc(receive_buf_len, 1);
 	if (!receive_buf)
@@ -737,7 +737,7 @@ static int ssh_handle_request(struct ssh_configs *ssh_configs, int sock,
 	 /* pre-run to ignore login messages */
 	rc = execute_remote_processes(session, channel, sock, receive_buf,
                                       receive_buf_len, &result, &result_len,
-				      server_host->terminator);
+				      server_host->terminator, total_retry);
 
 	/* keepalive message sent every 10s */
 	libssh2_keepalive_config(session, 0, 10);
@@ -758,7 +758,8 @@ static int ssh_handle_request(struct ssh_configs *ssh_configs, int sock,
 		rc = execute_remote_processes(session, channel, sock,
 					      receive_buf, receive_buf_len,
 					      &result, &result_len,
-					      server_host->terminator);
+					      server_host->terminator,
+                                              total_retry);
 		if (rc < 0) {
 			FERROR("ssh plugin: failed to execute remote command, rc %d, %s",
 				rc, receive_buf);
