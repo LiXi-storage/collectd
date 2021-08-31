@@ -46,6 +46,7 @@
 #include "plugin.h"
 #include "utils/common/common.h"
 #include "utils_cache.h"
+#include "utils_complain.h"
 #include "utils_random.h"
 
 #include <pthread.h>
@@ -92,6 +93,7 @@ struct wt_callback {
   cdtime_t send_buf_init_time;
 
   pthread_mutex_t send_lock;
+  c_complain_t init_complaint;
 
   bool connect_failed_log_enabled;
   int connect_dns_failed_attempts_remaining;
@@ -268,16 +270,16 @@ static int wt_callback_init(struct wt_callback *cb) {
   }
 
   if (cb->sock_fd < 0) {
-    ERROR("write_tsdb plugin: Connecting to %s:%s failed. "
-          "The last error was: %s",
-          node, service, STRERRNO);
+    c_complain(LOG_ERR, &cb->init_complaint,
+               "write_tsdb plugin: Connecting to %s:%s failed. "
+               "The last error was: %s",
+               node, service, STRERRNO);
     return -1;
+  } else {
+    c_release(LOG_INFO, &cb->init_complaint,
+              "write_tsdb plugin: Connecting to %s:%s succeeded.", node, service);
   }
 
-  if (0 == cb->connect_failed_log_enabled) {
-    WARNING("write_tsdb plugin: Connecting to %s:%s succeeded.", node, service);
-    cb->connect_failed_log_enabled = 1;
-  }
   cb->connect_dns_failed_attempts_remaining = 1;
   cb->connect_interval = DEFAULT_CONNECT_INTERVAL;
   wt_reset_buffer(cb);
@@ -326,8 +328,7 @@ static int wt_flush(cdtime_t timeout,
   if (cb->sock_fd < 0) {
     status = wt_callback_init(cb);
     if (status != 0) {
-      if (status != -EAGAIN)
-        ERROR("write_tsdb plugin: wt_callback_init failed.");
+      /* An error message has already been printed. */
       pthread_mutex_unlock(&cb->send_lock);
       return status;
     }
@@ -517,8 +518,7 @@ static int wt_send_message(const char *key, const char *value, cdtime_t time,
   if (cb->sock_fd < 0) {
     status = wt_callback_init(cb);
     if (status != 0) {
-      if (status != -EAGAIN)
-        ERROR("write_tsdb plugin: wt_callback_init failed.");
+      /* An error message has already been printed. */
       pthread_mutex_unlock(&cb->send_lock);
       return status;
     }
@@ -592,9 +592,7 @@ static int wt_write_messages(const data_set_t *ds, const value_list_t *vl,
     /* Send the message to tsdb */
     status = wt_send_message(key, values, vl->time, cb, vl->host, vl->meta);
     if (status != 0) {
-      if (status != -EAGAIN)
-        ERROR("write_tsdb plugin: error with "
-              "wt_send_message");
+      /* An error message has already been printed. */
       return status;
     }
   }
@@ -633,6 +631,7 @@ static int wt_config_tsd(oconfig_item_t *ci) {
   cb->last_connect_timestamp = 0;
 
   pthread_mutex_init(&cb->send_lock, NULL);
+  C_COMPLAIN_INIT(&cb->init_complaint);
 
   for (int i = 0; i < ci->children_num; i++) {
     oconfig_item_t *child = ci->children + i;
