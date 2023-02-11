@@ -682,26 +682,31 @@ static int filedata_data_submit(struct filedata_item_type *type,
 				struct filedata_item *item)
 {
 	int i;
+	int status = 0;
+	int ret;
 
 	for (i = 1; i <= type->fit_field_number; i++) {
 		if (data->fid_fields[i].ff_allowed == 0)
 			continue;
-		if (type->fit_field_array[i]->fft_type == TYPE_NUMBER)
-			filedata_submit(&type->fit_field_array[i]->fft_submit,
-					path_head,
-					type->fit_field_array,
-					data->fid_fields,
-					type->fit_field_number,
-					i,
-					data->fid_fields[i].ff_value,
-					data->fid_ext_tags,
-					data->fid_ext_tags_used,
-					type->fit_definition,
-					data->fid_query_time,
-					item->fi_query_interval);
+		if (type->fit_field_array[i]->fft_type == TYPE_NUMBER) {
+			ret = filedata_submit(&type->fit_field_array[i]->fft_submit,
+					      path_head,
+					      type->fit_field_array,
+					      data->fid_fields,
+					      type->fit_field_number,
+					      i,
+					      data->fid_fields[i].ff_value,
+					      data->fid_ext_tags,
+					      data->fid_ext_tags_used,
+					      type->fit_definition,
+					      data->fid_query_time,
+					      item->fi_query_interval);
+			if (ret)
+				status = ret;
+		}
 	}
 
-	return 0;
+	return status;
 }
 
 static struct filedata_item_data *
@@ -924,6 +929,7 @@ static int _filedata_parse(struct filedata_item_type *type,
 	char string[MAX_JOBSTAT_FIELD_LENGTH];
 	unsigned long long value;
 	int status = 0;
+	int ret;
 	struct filedata_item *ret_item = NULL;
 
 	fields = calloc(type->fit_field_number + 1, sizeof(regmatch_t));
@@ -996,13 +1002,17 @@ static int _filedata_parse(struct filedata_item_type *type,
 		if (filedata_item_match(data->fid_fields,
 					type->fit_field_number,
 					type, &ret_item)) {
-			status = filedata_item_extend_parse(type, data);
-			if (status == 0) {
-				filedata_data_submit(type, path_head, data,
-						     ret_item);
-			} else {
+			/*
+                         * If extended parse failed, just submit the original data.
+                         */
+			ret = filedata_item_extend_parse(type, data);
+			if (ret)
 				FINFO("Parse: failed to do extended parse");
-			}
+
+			status = filedata_data_submit(type, path_head, data,
+						      ret_item);
+			if (status)
+				ERROR("failed to submit file data");
 		}
 		previous += fields[0].rm_eo;
 	}
