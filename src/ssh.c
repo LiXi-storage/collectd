@@ -208,9 +208,9 @@ static int execute_remote_processes(LIBSSH2_SESSION *session,
 	const char numfds = 1;
 	struct pollfd pfds[numfds];
 	int len;
+	int new_len;
 	int retry = 0;
 	int count = 0;
-
 
 	/* Prepare to use poll */
 	memset(pfds, 0, sizeof(struct pollfd) * numfds);
@@ -261,23 +261,30 @@ static int execute_remote_processes(LIBSSH2_SESSION *session,
 			memset(buffer, 0, sizeof(buffer));
 			rc = libssh2_channel_read(channel, buffer,
 						  sizeof(buffer));
-			if (rc > 0 && nbytes + rc >= *result_len) {
-				*result_len += *result_len;
-				p = realloc(*result, *result_len);
-				if (!p)
-					return -ENOMEM;
-				*result = p;
-			}
 			if (rc > 0) {
+				new_len = *result_len;
+				while (nbytes + rc >= new_len) {
+					new_len *= 2;
+				}
+				if (new_len != *result_len) {
+					p = realloc(*result, new_len);
+					if (!p)
+						return -ENOMEM;
+					*result = p;
+					memset((char *)*result + *result_len,
+					       0, new_len - *result_len);
+					*result_len = new_len;
+				}
+
 				memcpy((char *)(*result) + nbytes,
-					buffer, rc);
+				       buffer, rc);
 				nbytes += rc;
 			}
 		} while (rc > 0);
 
 		if (rc < 0 && rc != LIBSSH2_ERROR_EAGAIN) {
 			FERROR("ssh plugin: libssh2_channel_read error: %s",
-				strerror(errno));
+			       strerror(errno));
 			return rc;
 		} else if (rc == 0) {
 			break;
@@ -768,7 +775,7 @@ static int ssh_handle_request(struct ssh_configs *ssh_configs, int sock,
 			/* connectio have been broken */
 			if (rc == -EIDRM)
 				break;
-			rc =  strlen(ERROR_FORMAT);
+			rc = strlen(ERROR_FORMAT);
 		}
 
 		/* Step 4: return results to collectd */
@@ -776,9 +783,9 @@ static int ssh_handle_request(struct ssh_configs *ssh_configs, int sock,
 		memset(zmq_msg_data(&reply), 0, rc);
 		memcpy(zmq_msg_data(&reply), result, rc);
 #ifdef HAVE_ZMQ_NEW_VER
-		rc = zmq_msg_send(&reply, responder, 0);
+		rc = zmq_msg_send(&reply, responder, 0 /* flags */);
 #else
-		rc = zmq_send(responder, &reply, 0);
+		rc = zmq_send(responder, &reply, 0 /* flags */);
 #endif
 		zmq_msg_close(&reply);
 		if (rc < 0) {
@@ -1019,6 +1026,8 @@ static int ssh_read_file(const char *path, char **buf, ssize_t *data_size,
 			strerror(errno));
 		return ret;
 	}
+	/* The caller assumes the message is terminated by '\0'. */
+	receive_buf[ret] = '\0';
 	/* Step4 Filter results */
 	if (!strncmp(receive_buf, ERROR_FORMAT, strlen(ERROR_FORMAT))) {
 		FERROR("ssh plugin: %s", receive_buf);
