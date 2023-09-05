@@ -313,7 +313,7 @@ static int stress_variable_field_get(char *field, size_t size, const char *name,
 				ERROR("stress2: variable is too long");
 				return -1;
 			} else {
-				strncpy(field, variable_value, size - 1);
+				strcpy(field, variable_value);
 			}
 			return 0;
 		}

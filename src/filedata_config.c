@@ -529,7 +529,7 @@ static inline char* filedata_check_extra_tags(char *extra_tags)
 		n = MAX_TSDB_TAGS_LENGTH - strlen(ret_p) - 1;
 		if (ret == 0) {
 			if (n > strlen(key_point)) {
-				strncat(ret_p, key_point, strlen(key_point));
+				strcat(ret_p, key_point);
 			} else {
 				FERROR("Common: ignore max buffer");
 				break;
@@ -1094,7 +1094,7 @@ static int filedata_config_option(const oconfig_item_t *ci,
 	int i;
 	int flag = 0;
 	struct filedata_submit_option *option = NULL;
-	char string[1024];
+	char string[MAX_NAME_LENGH + 1];
 	int inited = 0;
 	int status = 0;
 	char *value;
@@ -1132,7 +1132,7 @@ static int filedata_config_option(const oconfig_item_t *ci,
 				       " of \"%s\"", child->key);
 				break;
 			}
-			strncpy(string, value, 1024);
+			strncpy(string, value, MAX_NAME_LENGH);
 			free(value);
 			inited = 1;
 		} else {

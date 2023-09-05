@@ -240,7 +240,7 @@ void filedata_entry_dump(struct filedata_entry *entry, int depth)
 	struct filedata_item_type *item;
 	struct filedata_field_type *field;
 	struct filedata_subpath_field_type *subpath_field;
-	char prefix[1024];
+	char prefix[MAX_NAME_LENGH + 1];
 	int i;
 
 	for (i = 0; i < depth; i++) {
@@ -288,7 +288,7 @@ void filedata_entry_dump_active(struct filedata_entry *entry, int depth)
 {
 	struct filedata_entry *child;
 	struct filedata_item_type *item;
-	char prefix[1024];
+	char prefix[MAX_NAME_LENGH + 1];
 	int i;
 
 	if (!entry->fe_active)
@@ -483,7 +483,7 @@ filedata_xml_option_parse(struct filedata_field_type *field, xmlNode *node)
 	char *value;
 	int flag = 0;
 	struct filedata_submit_option *option = NULL;
-	char string[1024];
+	char string[MAX_NAME_LENGH + 1];
 	int inited = 0;
 
 	for (tmp = node; tmp; tmp = tmp->next) {
@@ -509,7 +509,7 @@ filedata_xml_option_parse(struct filedata_field_type *field, xmlNode *node)
 				break;
 			}
 			value = (char*)xmlNodeGetContent(tmp);
-			strncpy(string, value, 1024);
+			strncpy(string, value, MAX_NAME_LENGH);
 			xmlFree(value);
 			inited = 1;
 		} else {
