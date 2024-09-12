@@ -501,8 +501,7 @@ filedata_add_math_instances(struct filedata_submit *submit,
 		 * and @right_operand are same, something
 		 * like A * A operation spotted by Li Xi.
 		 */
-		if (strncmp(fme->fme_left_operand, tsdb_name,
-			    strlen(tsdb_name)) == 0) {
+		if (strcmp(fme->fme_left_operand, tsdb_name) == 0) {
 			status = filedata_add_math_instance(
 					&fme->fme_left_htable,
 					host, plugin, plugin_instance,
@@ -514,8 +513,7 @@ filedata_add_math_instances(struct filedata_submit *submit,
 				break;
 			}
 		}
-		if (strncmp(fme->fme_right_operand, tsdb_name,
-			    strlen(tsdb_name)) == 0) {
+		if (strcmp(fme->fme_right_operand, tsdb_name) == 0) {
 			status = filedata_add_math_instance(
 					&fme->fme_right_htable,
 					host, plugin, plugin_instance,
