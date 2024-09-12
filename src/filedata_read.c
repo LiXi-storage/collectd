@@ -508,8 +508,11 @@ filedata_add_math_instances(struct filedata_submit *submit,
 					host, plugin, plugin_instance,
 					type, type_instance, tsdb_name,
 					tsdb_tags, value);
-			if (status)
+			if (status) {
+				FERROR("failed to add value of tsdb name [%s] as left operand, errno = %d",
+				       tsdb_name, status);
 				break;
+			}
 		}
 		if (strncmp(fme->fme_right_operand, tsdb_name,
 			    strlen(tsdb_name)) == 0) {
@@ -518,8 +521,11 @@ filedata_add_math_instances(struct filedata_submit *submit,
 					host, plugin, plugin_instance,
 					type, type_instance,
 					tsdb_name, tsdb_tags, value);
-			if (status)
+			if (status) {
+				FERROR("failed to add value of tsdb name [%s] as left operand, errno = %d",
+				       tsdb_name, status);
 				break;
+			}
 		}
 	}
 
@@ -550,6 +556,7 @@ static int filedata_submit(struct filedata_submit *submit,
 	const char *ext_tags = fd->extra_tags;
 	uint64_t first_value = field_types[content_index]->fft_first_value;
 	bool fill_first_value = false;
+	int ret;
 
 	/* don't fill first value if this is first time query */
 	if ((field_types[content_index]->fft_flags &
@@ -657,16 +664,17 @@ static int filedata_submit(struct filedata_submit *submit,
 		strncat(tsdb_tags, ext_tags,
 			MAX_TSDB_TAGS_LENGTH - 1 - strlen(tsdb_tags));
 	} else if (ext_tags){
-		FERROR("submit: ignore overflow extra tsdb tags");
+		FERROR("submit: ignoring overflow extra tsdb tags");
 	}
 
 	if (submit->fs_math_entry_num) {
-		status = filedata_add_math_instances(submit,
+		ret = filedata_add_math_instances(submit,
 					host, plugin, plugin_instance,
 					type, type_instance,
 					tsdb_name, tsdb_tags, value);
-		if (status)
-			return status;
+		if (ret) {
+			FERROR("submit: ingoring math failure");
+		}
 	}
 	filedata_instance_submit(host, plugin, plugin_instance,
 				 type, type_instance,
