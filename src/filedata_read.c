@@ -1105,6 +1105,7 @@ static int filedata_parse_context_start_end(struct filedata_item_type *type,
 				break;
 		}
 		strncpy(buf, p_start, p_end - p_start + 1);
+		buf[p_end - p_start + 1] = '\0';
 
 		status = _filedata_parse(type, buf, time, path_head);
 		if (status)
